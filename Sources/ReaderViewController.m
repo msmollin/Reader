@@ -186,6 +186,7 @@
 					contentView.overlayView = [delegate overlayViewForPage:number inView:contentView];
 				}
 				[theScrollView addSubview:contentView]; [contentViews setObject:contentView forKey:key];
+				contentView.panGestureRecognizer.minimumNumberOfTouches = 2;
 
 				contentView.message = self; [newPageSet addIndex:number];
 			}

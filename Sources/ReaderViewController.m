@@ -75,6 +75,7 @@
 #pragma mark Properties
 
 @synthesize delegate;
+@synthesize mainScrollView = theScrollView;
 
 #pragma mark Support methods
 
@@ -180,7 +181,10 @@
 				NSURL *fileURL = document.fileURL; NSString *phrase = document.password; // Document properties
 
 				contentView = [[ReaderContentView alloc] initWithFrame:viewRect fileURL:fileURL page:number password:phrase];
-
+				if ([delegate respondsToSelector:@selector(overlayViewForPage:inView:)])
+				{
+					contentView.overlayView = [delegate overlayViewForPage:number inView:contentView];
+				}
 				[theScrollView addSubview:contentView]; [contentViews setObject:contentView forKey:key];
 
 				contentView.message = self; [newPageSet addIndex:number];
@@ -278,6 +282,8 @@
 	document.lastOpen = [NSDate date]; // Update last opened date
 
 	isVisible = YES; // iOS present modal bodge
+
+	if ([delegate respondsToSelector:@selector(documentDidLoad)]) [delegate documentDidLoad]; //inform the delegate we loaded the document
 }
 
 #pragma mark UIViewController methods
@@ -514,7 +520,11 @@
 		}
 	];
 
-	if (page != 0) [self showDocumentPage:page]; // Show the page
+	if (page != 0)
+	{
+		[self showDocumentPage:page]; // Show the page
+		if ([delegate respondsToSelector:@selector(scrollView:movedToPage:)]) [delegate scrollView:scrollView movedToPage:page]; //Inform delegate about the change
+	}
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
@@ -915,6 +925,7 @@
 - (void)pagebar:(ReaderMainPagebar *)pagebar gotoPage:(NSInteger)page
 {
 	[self showDocumentPage:page]; // Show the page
+	if ([delegate respondsToSelector:@selector(scrollView:movedToPage:)]) [delegate scrollView:theScrollView movedToPage:page]; //Inform delegate about the change
 }
 
 #pragma mark UIApplication notification methods

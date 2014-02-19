@@ -43,6 +43,9 @@
 
 @property (nonatomic, weak, readwrite) id <ReaderContentViewDelegate> message;
 
+//! Tracking reference to overlay view that can be added by ReaderViewController delegate method. Default is nil. Important to note this will enable the container view to consume touches, thus preventing the underneath document from following links.
+@property (nonatomic, strong) UIView *overlayView;
+
 - (id)initWithFrame:(CGRect)frame fileURL:(NSURL *)fileURL page:(NSUInteger)page password:(NSString *)phrase;
 
 - (void)showPageThumb:(NSURL *)fileURL page:(NSInteger)page password:(NSString *)phrase guid:(NSString *)guid;

@@ -224,6 +224,16 @@ static inline CGFloat ZoomScaleThatFits(CGSize target, CGSize source)
 		viewFrame.origin.y = 0.0f;
 
 	theContainerView.frame = viewFrame;
+	if (self.overlayView)
+	{
+		self.overlayView.frame = theContainerView.bounds;
+		// Seems to be a bug in iOS 7 where even if autoResizesSubviews is set to YES on theContainerView, they don't actually get resized on frame change,
+		// so we do this manually for the overlay views
+		for (UIView *view in self.overlayView.subviews)
+		{
+			view.frame = self.overlayView.bounds;
+		}
+	}
 }
 
 - (id)processSingleTap:(UITapGestureRecognizer *)recognizer
@@ -270,6 +280,25 @@ static inline CGFloat ZoomScaleThatFits(CGSize target, CGSize source)
 	if (self.zoomScale > self.minimumZoomScale)
 	{
 		self.zoomScale = self.minimumZoomScale;
+	}
+}
+
+- (void)setOverlayView:(UIView *)overlayView
+{
+	if (_overlayView)
+	{
+		[_overlayView removeFromSuperview];
+		theContainerView.userInteractionEnabled = NO;
+		_overlayView = nil;
+	}
+	_overlayView = overlayView;
+	
+	if (_overlayView)
+	{
+		_overlayView.bounds = theContainerView.frame;
+		[theContainerView addSubview:_overlayView];
+		[theContainerView bringSubviewToFront:_overlayView];
+		theContainerView.userInteractionEnabled = YES;
 	}
 }
 

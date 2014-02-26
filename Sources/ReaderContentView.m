@@ -68,10 +68,12 @@ static void *ReaderContentViewContext = &ReaderContentViewContext;
 static inline CGFloat ZoomScaleThatFits(CGSize target, CGSize source)
 {
 	CGFloat w_scale = (target.width / source.width);
-
+    if (w_scale == 0) w_scale = 0.001f;
+    
 	CGFloat h_scale = (target.height / source.height);
-
-	return ((w_scale < h_scale) ? w_scale : h_scale);
+    if (h_scale == 0) h_scale = 0.001f;
+    
+    return ((w_scale < h_scale) ? w_scale : h_scale);
 }
 
 #pragma mark ReaderContentView instance methods

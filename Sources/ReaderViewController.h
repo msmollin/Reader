@@ -34,16 +34,12 @@
 @optional // Delegate protocols
 
 - (void)dismissReaderViewController:(ReaderViewController *)viewController;
-- (UIView *)overlayViewForPage:(NSInteger)pageNumber inView:(UIView *)view;
-- (void)scrollView:(UIScrollView *)scrollView movedToPage:(NSInteger)page;
-- (void)documentDidLoad;
 
 @end
 
 @interface ReaderViewController : UIViewController
 
 @property (nonatomic, weak, readwrite) id <ReaderViewControllerDelegate> delegate;
-@property (nonatomic, strong, readonly) UIScrollView *mainScrollView;
 
 - (id)initWithReaderDocument:(ReaderDocument *)object;
 

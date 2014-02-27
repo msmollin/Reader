@@ -26,6 +26,7 @@
 #import <UIKit/UIKit.h>
 
 #import "ReaderDocument.h"
+#import "ReaderMainToolbar.h"
 
 @class ReaderViewController;
 
@@ -34,12 +35,17 @@
 @optional // Delegate protocols
 
 - (void)dismissReaderViewController:(ReaderViewController *)viewController;
+- (UIView *)overlayViewForPage:(NSInteger)pageNumber inView:(UIView *)view;
+- (void)scrollView:(UIScrollView *)scrollView movedToPage:(NSInteger)page;
+- (void)documentDidLoad;
 
 @end
 
 @interface ReaderViewController : UIViewController
 
 @property (nonatomic, weak, readwrite) id <ReaderViewControllerDelegate> delegate;
+@property (nonatomic, strong, readonly) UIScrollView *mainScrollView;
+@property (nonatomic, strong, readonly) ReaderMainToolbar *mainToolbar;
 
 - (id)initWithReaderDocument:(ReaderDocument *)object;
 
